@@ -24,7 +24,9 @@ c2=-0.24,#Limb Darkening
 #//////////////////////////////
 ap=1.0*AU,
 ep=0.0,
-iorb=90.0*DEG,
+#iorb=89.95*DEG,#Paper
+#iorb=90.00*DEG,
+iorb=89.95*DEG,
 #iorb=90.1*DEG,
 wp=0.0*DEG,
 #//////////////////////////////
@@ -37,6 +39,7 @@ fp=0.0, #Oblateness
 #RINGS
 #//////////////////////////////
 fe=RSAT_ARING/RSAT, #Exterior ring (Rp)
+#fe=5.0,
 fi=RSAT_BRING/RSAT, #Interior ring (Rp)
 ir=10.0*DEG, #Ring inclination
 phir=60.0*DEG, #Ring roll angle

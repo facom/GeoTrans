@@ -4,6 +4,7 @@
 from matplotlib import pyplot as plt
 from matplotlib import patches as pat
 from matplotlib.pyplot import cm
+from matplotlib.transforms import offset_copy
 from cmath import sqrt as csqrt,phase
 from scipy import constants as const
 from scipy.optimize import newton,brentq,fsolve
@@ -2483,7 +2484,7 @@ def transitFunction(f,i):
         t1=2/pi*arcsin(1/(f*sin(i))*sqrt(f**2-1))
         t2=2/pi*arcsin(cos(i)/(sin(i))*sqrt(f**2-1))
         T=f**2*cos(i)*t1-t2
-            
+
     return T
 
 def analyticalTransitArea(Rp,beta,fi,fe,i):
@@ -2703,3 +2704,10 @@ def randomFisher(kappa=0.0,nsample=1):
     u=RAND(nsample)*(1-lamb)+lamb
     thetas=2*arcsin(sqrt(-log(u)/(2*kappa)))
     return thetas
+
+def offSet(dx,dy):
+    fig=plt.gcf()
+    ax=fig.gca()
+    toff=offset_copy(ax.transData,fig=fig,
+                     x=dx,y=dy,units='dots')
+    return toff

@@ -89,7 +89,8 @@ params.add("stp",value=0.0,
 #FIT OBLATE
 #########################################
 print "Fitting oblate..."
-params['Rp'].value=0.1715
+#params['Rp'].value=0.1715
+params['Rp'].value=0.11
 if qfit_obl:
     result=minimize(residualTransitPlanet,
                     params,
