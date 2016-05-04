@@ -9,7 +9,7 @@ cleandata:
 cleanall:clean cleandata
 
 commit:
-	git commit -am "Commit"
+	-git commit -am "Commit"
 	git push origin master
 
 pull:
