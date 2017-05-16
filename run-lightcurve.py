@@ -1,7 +1,19 @@
 from geotrans import *
 from system import *
+from systemnr import *
 print BARL,"Synthetizing Light Curve",RBAR
 S=System
+Snr=Systemnr
+"""
+print S.Ap,S.Ar
+
+Snr=copyObject(S)
+Snr.Ringext.b=Snr.Ringint.b=0.0
+Snr.Rplanet*=2.0
+updatePlanetRings(Snr)
+"""
+print "Ringed:",S.Ap,S.Ar
+print "Not ringed:",Snr.Ap,Snr.Ar
 
 #########################################
 #CONTACT TIMES
@@ -12,6 +24,7 @@ tcen,t1,t2,t3,t4=tcsr
 tmin=tcsr[1]-2*S.dtplanet
 tmax=tcsr[4]+2*S.dtplanet
 Ar=ringedPlanetArea(S)
+Anr=ringedPlanetArea(Snr)
 
 #########################################
 #OBSERVATIONS
@@ -73,14 +86,17 @@ dss=signal[:,2]
 #########################################
 tes=[]
 ses=[]
+snrs=[]
 dt=S.dtplanet/2
 tmin=min(ts+tcen)
 tmax=max(ts+tcen)
 for t in linspace(tmin,tmax,100):
     #A=transitAreaTimeFast(t,tcsr,Ar,S)
     se=fluxLimbTime(t,Ar,S)
+    snr=fluxLimbTime(t,Anr,Snr)
     tes+=[(t-S.tcen)/HOUR]
     ses+=[se]
+    snrs+=[snr]
 
 savetxt("transit.dat",transpose(vstack((array(tes)*HOUR,ses))))
 
@@ -94,6 +110,7 @@ ax=fig.gca()
 ax.plot(ts/HOUR,ss,'ko',markersize=2)
 #ax.errorbar(ts/HOUR,ss,yerr=dss,linestyle='none',color='k')
 ax.plot(tes,ses,'r-')
+ax.plot(tes,snrs,'g-')
 
 #FLUX RANGE
 ymin=min(ss)
@@ -121,6 +138,7 @@ ax.set_ylim((ymin,ymax))
 ax.set_xlim(((tmin-tcen)/HOUR,(tmax-tcen)/HOUR))
 ax.set_xlabel(r"$t-t_{\rm cen}$ (hours)",fontsize=14)
 ax.set_ylabel(r"Relative Flux",fontsize=14)
-ax.set_title("Synthetic Signal",position=(0.5,1.05))
+ax.set_title("Ring transit",position=(0.5,1.05))
 ax.grid()
-fig.savefig("plots/lightcurve.png")
+#fig.savefig("plots/lightcurve.png")
+fig.savefig("plots/lightcurve-ADAP.png")

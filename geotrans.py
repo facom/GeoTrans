@@ -13,7 +13,7 @@ from scipy.interpolate import interp1d as interpolant
 from sys import argv,exit
 from os import system
 from numpy import *
-from lmfit import minimize,Parameters,Parameter,report_fit
+#from lmfit import minimize,Parameters,Parameter,report_fit
 import commands
 from os import system
 
