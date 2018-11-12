@@ -1936,9 +1936,6 @@ def eccentricAnomalyFast(e,M):
 
 def derivedSystemProperties(S):
 
-    #STAR
-    S.Flux=S.qeff*planckPhotons(500*NANO,700*NANO,S.Tstar)*S.Rstar**2/S.Dstar**2*(4*pi*S.Ddet**2)
-    
     #ROTATION MATRICES
     S.Mi=rotMat([1,0,0],-S.iorb)
     S.Mw=rotMat([0,0,1],S.wp)
@@ -1950,8 +1947,15 @@ def derivedSystemProperties(S):
     S.Re=S.fe*S.Rp
 
     #STAR
-    S.Rstar=RSUN*(S.Mstar/MSUN)**0.8
-    S.Lstar=LSUN*(S.Mstar/MSUN)**3.5
+    if S.Rstar<0:
+        S.Rstar=RSUN*(S.Mstar/MSUN)**0.8
+    if S.Lstar<0:
+        S.Lstar=LSUN*(S.Mstar/MSUN)**3.5
+
+    #STAR
+    #For quantum efficiency of Kepler and TESS see: 
+    #https://heasarc.gsfc.nasa.gov/docs/tess/the-tess-space-telescope.html
+    S.Flux=S.qeff*planckPhotons(S.lambda1*NANO,S.lambda2*NANO,S.Tstar)*S.Rstar**2/S.Dstar**2*(pi*S.Ddet**2)
 
     #ORBIT
     S.Porb=2*pi*sqrt(S.ap**3/(GCONST*(S.Mstar+S.Mplanet)))
@@ -2726,5 +2730,69 @@ def offSet(dx,dy):
                      x=dx,y=dy,units='dots')
     return toff
 
+#Adapted from: https://gist.github.com/mwcraig/38469d291643d0ae04dc
+def jd2bkjd(jd_utc, sky_position):
+    """
+    Return BJD_TDB from JD_UTC at geocenter for object at desired RA/Dec.
+    Parameters
+    ----------
+    jd_utc : flt or ``astropy.Time`` or ``astropy.Quatity``
+        One or more times, as Julian Date in the UTC time scale. UTC is what
+        any networked computer's timestamp records.
+
+    sky_position : ``astropy.coordinates.SkyCoord``
+        Position on the sky o Fourier transform object of interest. Must be
+        a single coordinate.
+
+    Returns
+    -------
+    bjd_tdb : `astropy.Quantity`
+        BJD in the TDB time scale for each of the input JD_UTC.
+    """
+    #Reference jd
+    #UTC=January 1, 2009 12:00:00, see http://archive.stsci.edu/kepler/manuals/archive_manual.htm
+    kjd=2454833.0
+    
+    # Calculate jd_tdb from jd_utc for each of the input jd_utc
+    jd_utc = Time(jd_utc, format='jd', scale='utc')
+    jd_tdb = jd_utc.tdb
+
+    # Calculate the position of the sun at each jd_tdb
+    sun_earth_displacement = KERNEL[0, 3].compute(jd_tdb.jd) * u.km
+    sum_axis = sun_earth_displacement.ndim - 1
+
+    # Calculate the time offset to the barycenter using the plane wave approximation
+    delta_t_utc = (sun_earth_displacement.T *
+                   sky_position.cartesian.xyz).sum(axis=sum_axis)/c
+
+    # Add that offset to jd_tdb to obtain bjd_tdb
+    bjd_tdb = jd_tdb + delta_t_utc
+
+    # Compute BKJD
+    bkjd=bjd_tdb.value-kjd
+
+    return bkjd
+
 if __name__=="__main__":
-    pass
+
+    #Import System
+    from system import *
+    
+    #UTC Date string
+    date="2009-05-22T00:19:58"
+    t=Time(date,format="isot",scale="utc")
+    print(f"Original date: {t}")
+    print(f"Julian date: {t.jd}")
+
+    #Position of the object
+    position=SkyCoord("23:23:08.55", "+18:24:59.3",
+                      unit=(u.hourangle,u.deg),frame='icrs')
+    print(position)
+    
+    #BKJD
+    bkjd=jd2bkjd(t.jd,position)
+    print(f"BKJD: {bkjd}")
+
+    #Import test star
+    from kepler421 import *
+    print(System.Flux)
