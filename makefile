@@ -1,3 +1,9 @@
+BRANCH=$(shell bash .getbranch)
+
+branch:
+	@echo "You are in: $(PWD)"
+	@echo $(BRANCH)
+
 clean:
 	find . -name "*~" -exec rm -rf {} \;
 	find . -name "#*#" -exec rm -rf {} \;
@@ -9,9 +15,11 @@ cleandata:
 cleanall:clean cleandata
 
 commit:
-	-git commit -am "Commit"
-	git push origin master
+	@echo "Commiting..."
+	@-git commit -am "Commit"
+	@-git push origin $(BRANCH)
 
 pull:
-	git reset --hard HEAD	
-	git pull
+	@echo "Pulling latest version..."
+	@-git reset --hard HEAD
+	@-git pull origin $(BRANCH)
