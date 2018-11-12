@@ -41,7 +41,7 @@ fp=0.0, #Oblateness
 fe=RSAT_ARING/RSAT, #Exterior ring (Rp)
 #fe=5.0,
 fi=RSAT_BRING/RSAT, #Interior ring (Rp)
-ir=10.0*DEG, #Ring inclination
+ir=30.0*DEG, #Ring inclination
 phir=60.0*DEG, #Ring roll angle
 tau=1.0, #Opacity
 ))

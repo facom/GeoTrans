@@ -3,8 +3,15 @@ from system import *
 from systemnr import *
 print BARL,"Synthetizing Light Curve",RBAR
 S=System
-Snr=Systemnr
+Snr=onlyPlanet(S)
+Snr.Rplanet*=2.0
 """
+print Snr
+Snr=copyObject(S)
+Snr.Rplanet*=2.0
+Snr.Ringext=None;Snr.Ringint=None
+updatePlanetRings(Snr)
+Snr.Ringext.b=Snr.Ringint.b=0.0
 print S.Ap,S.Ar
 
 Snr=copyObject(S)
