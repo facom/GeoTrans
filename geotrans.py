@@ -1,6 +1,7 @@
 ###################################################
 #MODULES REQUIRED
 ###################################################
+from ipython import *
 from matplotlib import pyplot as plt
 from matplotlib import patches as pat
 from matplotlib.pyplot import cm
@@ -16,6 +17,19 @@ from numpy import *
 from lmfit import minimize,Parameters,Parameter,report_fit
 import subprocess
 from os import system
+
+from jplephem.spk import SPK
+from astropy.constants import c
+import astropy.units as u
+from astropy.coordinates import SkyCoord
+from astropy.time import Time
+KERNEL = SPK.open('util/de430.bsp')
+
+###################################################
+#REMOVE WARNINGS
+###################################################
+import warnings
+warnings.simplefilter('ignore')
 
 ###################################################
 #MACROS
@@ -2711,3 +2725,6 @@ def offSet(dx,dy):
     toff=offset_copy(ax.transData,fig=fig,
                      x=dx,y=dy,units='dots')
     return toff
+
+if __name__=="__main__":
+    pass
