@@ -1,6 +1,6 @@
 from geotrans import *
 from system import *
-print(BARL,"Fit light curve",RBAR)
+print BARL,"Fit light curve",RBAR
 S=System
 Planet=onlyPlanet(System)
 FVERBOSE=1
@@ -21,7 +21,7 @@ def residualTransitPlanet(params,
         transitFunc=areaStriping
         qoblate=False
     else:
-        if FVERBOSE:print("Testing: Rp = %e, fp = %e, stp = %e"%(Rp,fp,stp))
+        if FVERBOSE:print "Testing: Rp = %e, fp = %e, stp = %e"%(Rp,fp,stp)
         S.Planet.b*=(1-fp)
         S.Planet.sint=stp
         S.Planet.cost=ctp
@@ -38,7 +38,7 @@ def residualTransitPlanet(params,
     residual=transit-signal
     if qoblate:
         chisq=(residual**2).sum()
-        if FVERBOSE:print("Chi-square = %e"%chisq)
+        if FVERBOSE:print "Chi-square = %e"%chisq
     return residual
 
 #########################################
@@ -88,7 +88,7 @@ params.add("stp",value=0.0,
 #########################################
 #FIT OBLATE
 #########################################
-print("Fitting oblate...")
+print "Fitting oblate..."
 #params['Rp'].value=0.1715
 params['Rp'].value=0.11
 if qfit_obl:
@@ -108,7 +108,7 @@ bestfit_obl=residualTransitPlanet(params,ttimes,
 #########################################
 #FIT SPHERICAL
 #########################################
-print("Fitting spherical...")
+print "Fitting spherical..."
 params['Rp'].value=0.103033
 params['fp'].value=0.0
 params['fp'].vary=False

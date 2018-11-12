@@ -1,6 +1,6 @@
 from geotrans import *
 from system import *
-print((BARL,"Creating Transit Parameters Contours",RBAR))
+print(BARL,"Creating Transit Parameters Contours",RBAR)
 
 #########################################
 #NOT RINGED PLANET
@@ -8,20 +8,20 @@ print((BARL,"Creating Transit Parameters Contours",RBAR))
 S=System
 NotRinged=copyObject(S)
 NotRinged.Ringext.b=NotRinged.Ringint.b=0.0
-print(("ieff,teff = ",S.ieff*RAD,S.teff*RAD))
+print("ieff,teff = ",S.ieff*RAD,S.teff*RAD)
 
 
 #########################################
 #CONTACT TIMESCALES
 #########################################
 print("Single planet parameters:")
-print((TAB,"Calculating contact times..."))
+print(TAB,"Calculating contact times...")
 tcsp=contactTimes(NotRinged)
 t14p=(tcsp[-1]-tcsp[1])/HOUR
 t23p=(tcsp[-2]-tcsp[2])/HOUR
 dp=S.Rp**2
-print((TAB,"T_14 = %e h = %e s"%(t14p,t14p*HOUR)))
-print((TAB,"Transit depth = %e"%(dp)))
+print(TAB,"T_14 = %e h = %e s"%(t14p,t14p*HOUR))
+print(TAB,"Transit depth = %e"%(dp))
 
 #THEORETICAL
 aR_obs=2*S.Porb/pi*\
@@ -35,22 +35,22 @@ rho_true=S.Mstar/(4*pi/3*S.Rstar**3)
 aR_true=S.ap/S.Rstar
 b_true=S.Borb
 
-print((TAB,"rho_star(obs) = %e"%rho_obs))
-print((TAB,"rho_star(true) = %e"%rho_true))
+print(TAB,"rho_star(obs) = %e"%rho_obs)
+print(TAB,"rho_star(true) = %e"%rho_true)
 
-print((TAB,"a/Rstar (obs) = %e"%aR_obs))
-print((TAB,"a/Rstar (true) = %e"%aR_true))
+print(TAB,"a/Rstar (obs) = %e"%aR_obs)
+print(TAB,"a/Rstar (true) = %e"%aR_true)
 
-print((TAB,"b (obs) = %e"%b_obs))
-print((TAB,"b (true) = %e"%b_true))
+print(TAB,"b (obs) = %e"%b_obs)
+print(TAB,"b (true) = %e"%b_true)
 
-print((TAB,"Planet transit duration: T14 = %.3fh, T23 = %.3fh"%(t14p,t23p)))
+print(TAB,"Planet transit duration: T14 = %.3fh, T23 = %.3fh"%(t14p,t23p))
 
 tcsr=contactTimes(S)
 t14ref=(tcsr[-1]-tcsr[1])/HOUR
 t23ref=(tcsr[-2]-tcsr[2])/HOUR
 
-print((TAB,"Contact timescales: T14 = %.3fh, T23 = %.3fh"%(t14ref,t23ref)))
+print(TAB,"Contact timescales: T14 = %.3fh, T23 = %.3fh"%(t14ref,t23ref))
 
 ############################################
 #PLOT TRANSIT DEPTH AS A FUNCTION OF PR.INCL
@@ -107,7 +107,7 @@ if qsave:
     VERBCONT=1
     for cieff in cieffs:
         ieff=arccos(cieff)
-        print(("Projected Inclination: ieff = %.2f"%(ieff*RAD)))
+        print("Projected Inclination: ieff = %.2f"%(ieff*RAD))
         j=0
 
         S.Ringext.b=S.Re*cieff
@@ -118,27 +118,27 @@ if qsave:
         dpr=Ar/pi
 
         for teff in teffs:
-            if VERBCONT:print((TAB,"Projected Roll: t = %.2f (ieff=%.2f)"%(teff*RAD,ieff*RAD)))
+            if VERBCONT:print(TAB,"Projected Roll: t = %.2f (ieff=%.2f)"%(teff*RAD,ieff*RAD))
             S.Ringext.cost=S.Ringint.cost=cos(teff)
             S.Ringext.sint=S.Ringint.sint=sin(teff)
             
             ts=contactTimes(S)
             t14=(ts[-1]-ts[1])/HOUR
             t23=(ts[-2]-ts[2])/HOUR
-            if VERBCONT:print((2*TAB,"Transit times = ",t14,t23))
+            if VERBCONT:print(2*TAB,"Transit times = ",t14,t23)
             
             aR_obsR=2*S.Porb/pi*\
                 dpr**0.25/((t14*HOUR)**2-(t23*HOUR)**2)**0.5
             rho_obsR=3*pi*aR_obsR**3/(GCONST*S.Porb**2)
-            if VERBCONT:print((2*TAB,"a/Rstar (obs,ring) = ",aR_obsR))
-            if VERBCONT:print((2*TAB,"rho(obs,ring) = ",rho_obsR))
+            if VERBCONT:print(2*TAB,"a/Rstar (obs,ring) = ",aR_obsR)
+            if VERBCONT:print(2*TAB,"rho(obs,ring) = ",rho_obsR)
 
             DST14[i,j]=t14/t14p-1
             DST23[i,j]=t23/t23p-1
-            if VERBCONT:print((2*TAB,"Comparison: dt14 = %e. dt23 = %e"%(DST14[i,j],DST23[i,j])))
+            if VERBCONT:print(2*TAB,"Comparison: dt14 = %e. dt23 = %e"%(DST14[i,j],DST23[i,j]))
 
             DSRHO[i,j]=log10(rho_obsR/rho_obs)
-            if VERBCONT:print((2*TAB,"Astrodensity: rhoR/rhoP = %e"%(DSRHO[i,j])))            
+            if VERBCONT:print(2*TAB,"Astrodensity: rhoR/rhoP = %e"%(DSRHO[i,j]))            
             if VERBCONT:exit(0)
 
             j+=1

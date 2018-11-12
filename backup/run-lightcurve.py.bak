@@ -1,7 +1,7 @@
 from geotrans import *
 from system import *
 from systemnr import *
-print((BARL,"Synthetizing Light Curve",RBAR))
+print(BARL,"Synthetizing Light Curve",RBAR)
 S=System
 Snr=onlyPlanet(S)
 Snr.Rplanet*=2.0
@@ -19,8 +19,8 @@ Snr.Ringext.b=Snr.Ringint.b=0.0
 Snr.Rplanet*=2.0
 updatePlanetRings(Snr)
 """
-print(("Ringed:",S.Ap,S.Ar))
-print(("Not ringed:",Snr.Ap,Snr.Ar))
+print("Ringed:",S.Ap,S.Ar)
+print("Not ringed:",Snr.Ap,Snr.Ar)
 
 #########################################
 #CONTACT TIMES
@@ -41,10 +41,10 @@ nobs=int(ceil((tmax-tmin)/tcad)) #Number of observations
 ntrans=10 #Number of transits
 Nexp=tcad*S.Flux
 
-print(("Cadence time = %.2f min"%(tcad/MINUTE)))
-print(("Counts per observation = %e"%(Nexp)))
-print(("Number of observations per transit = %d"%(nobs)))
-print(("Number of transits = %d"%(ntrans)))
+print("Cadence time = %.2f min"%(tcad/MINUTE))
+print("Counts per observation = %e"%(Nexp))
+print("Number of observations per transit = %d"%(nobs))
+print("Number of transits = %d"%(ntrans))
 
 def signalFunction(t,arg):
     #At=transitAreaTimeFast(t,tcsr,Ar,S)
@@ -61,8 +61,8 @@ if qsave:
     dss=[]
     for it in range(ntrans):
         t=tmin-randomVal(0,tcad)
-        print(("*"*50))
-        print(("Transit %d starting at t = %.2f h"%(it,(t-S.tcen)/HOUR)))
+        print("*"*50)
+        print("Transit %d starting at t = %.2f h"%(it,(t-S.tcen)/HOUR))
         for io in range(nobs):
             #INTEGRATE DURING CADENCE PERIOD
             Nobs=gaussianQuadrature(signalFunction,t,t+tcad)

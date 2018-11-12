@@ -5,7 +5,7 @@ from system import *
 #TEST ROUTINES
 ###################################################
 def test_transit_curve_limb():
-    print(BARL,"Testing Transit Limb Darkening Curve",RBAR)
+    print BARL,"Testing Transit Limb Darkening Curve",RBAR
     
     #////////////////////////////////////////
     #TRANSIT CURVE
@@ -48,9 +48,9 @@ def test_transit_curve_limb():
     Apt=FIGUREAREA(SphericalPlanet.Planet)
     Apo=FIGUREAREA(OblatePlanet.Planet)
     
-    print("Area of the planet spherical (star area units) = ",Apt)
-    print("Area of the planet oblate (star area units) = ",Apo)
-    print("Area of the ringed planet (star area units) = ",Art)
+    print "Area of the planet spherical (star area units) = ",Apt
+    print "Area of the planet oblate (star area units) = ",Apo
+    print "Area of the ringed planet (star area units) = ",Art
 
     #CURVE
     ts=linspace(tmin,tmax,N)
@@ -78,8 +78,8 @@ def test_transit_curve_limb():
         Flos+=[Flo]
 
         if (i%n)==0:
-            print("i = %d, t = %e, At = %e, Ap = %e, Ao = %e"%\
-                (i,(t-System.tcen)/HOUR,At,Ap,Ao))
+            print "i = %d, t = %e, At = %e, Ap = %e, Ao = %e"%\
+                (i,(t-System.tcen)/HOUR,At,Ap,Ao)
         i+=1
 
     #////////////////////////////////////////
@@ -149,7 +149,7 @@ def test_transit_curve_limb():
     fig.savefig("plots/test_transit_curve_limb.png")
 
 def test_limb_darkening():
-    print(BARL,"Testing Limb Darkening",RBAR)
+    print BARL,"Testing Limb Darkening",RBAR
     
     #////////////////////////////////////////
     #PLOT
@@ -185,7 +185,7 @@ def test_limb_darkening():
     fig.savefig("plots/test_limb_darkening_normalized.png")
 
 def test_transit_curve():
-    print(BARL,"Testing Transit Curve",RBAR)
+    print BARL,"Testing Transit Curve",RBAR
     
     #////////////////////////////////////////
     #TRANSIT CURVE
@@ -216,8 +216,8 @@ def test_transit_curve():
     Art=ringedPlanetArea(System)
     Apt=pi*System.Rp**2
     
-    print("Area of the planet alone (star area units) = ",Apt)
-    print("Area of the ringed planet (star area units) = ",Art)
+    print "Area of the planet alone (star area units) = ",Apt
+    print "Area of the ringed planet (star area units) = ",Art
 
     #CURVE
     ts=linspace(tmin,tmax,N)
@@ -230,8 +230,8 @@ def test_transit_curve():
         Ats+=[1-At/pi]
         Aps+=[1-Ap/pi]
         if (i%n)==0:
-            print("i = %d, t = %e, At = %e"%\
-                (i,(t-System.tcen)/HOUR,At))
+            print "i = %d, t = %e, At = %e"%\
+                (i,(t-System.tcen)/HOUR,At)
         i+=1
 
     #////////////////////////////////////////
@@ -281,12 +281,12 @@ def test_transit_curve():
     fig.savefig("plots/test_transit_curve.png")
 
 def test_contacts():
-    print(BARL,"Testing Contact Times",RBAR)
+    print BARL,"Testing Contact Times",RBAR
     #////////////////////////////////////////
     #CONTACT TIMES
     #////////////////////////////////////////
     tcs=contactTimes(System)
-    print("Transit duration = %.3f h"%((tcs[-1]-tcs[1])/HOUR))
+    print "Transit duration = %.3f h"%((tcs[-1]-tcs[1])/HOUR)
 
     #////////////////////////////////////////
     #PLOT
@@ -321,7 +321,7 @@ def test_contacts():
     
     
 def test_system():
-    print(BARL,"Testing System Properties",RBAR)
+    print BARL,"Testing System Properties",RBAR
     #systemShow(System)
 
     #////////////////////////////////////////
@@ -383,7 +383,7 @@ def test_system():
     ys=System.Re*sin(fs)
     zs=zeros_like(xs)
     rs=array([dot(System.Mrs,AR3(x,y,z))+System.rs for x,y,z in zip(xs,ys,zs)])
-    for i in range(len(rs)):
+    for i in xrange(len(rs)):
         c='k'
         if (rs[i,2]-System.rs[2])<0:c='r'
         ax.plot([rs[i,0]],[rs[i,1]],'o',markeredgecolor='none',color=c,markersize=2)

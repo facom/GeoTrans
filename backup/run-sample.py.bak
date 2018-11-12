@@ -1,6 +1,6 @@
 from geotrans import *
 from system import *
-print(BARL,"Distribution of PR",RBAR)
+print BARL,"Distribution of PR",RBAR
 
 #########################################
 #SYSTEM
@@ -46,7 +46,7 @@ aR_obs=2*S.Porb/pi*\
 b_obs=(((1-sqrt(dp))**2-(t23p/t14p)**2*(1+sqrt(dp))**2)/\
     (1-(t23p/t14p)**2))**0.5
 rho_true=3*pi*aR_obs**3/(GCONST*S.Porb**2) #Kipping, 2013
-print("True density = ",rho_true)
+print "True density = ",rho_true
 
 #########################################
 #SAMPLE GENERATION
@@ -59,9 +59,9 @@ if qcalc:
     cieffs=[]
     teffs=[]
     Borbs=[]
-    for i in range(Nplanets*Nsamples):
+    for i in xrange(Nplanets*Nsamples):
         if (i%Nplanets)==0:
-            print("Sample %d: %d planets generated..."%(i/Nplanets,i))
+            print "Sample %d: %d planets generated..."%(i/Nplanets,i)
         #RANDOM INPUT PARAMETERS
         cir=randomVal(0.0,1.0)
         ir=arccos(cir)
@@ -70,10 +70,10 @@ if qcalc:
         phir=randomVal(0.0,360.0)*DEG
         
         if verbose:
-            print("Testing values:")
-            print(TAB,"ir = ",ir*RAD)
-            print(TAB,"phir = ",phir*RAD)
-            print(TAB,"iorb = ",iorb*RAD)
+            print "Testing values:"
+            print TAB,"ir = ",ir*RAD
+            print TAB,"phir = ",phir*RAD
+            print TAB,"iorb = ",iorb*RAD
         
         #CONVERTING INTO OBSERVED
         S.ir=ir
@@ -83,10 +83,10 @@ if qcalc:
         updatePlanetRings(S)
         
         if verbose:
-            print("Derived Properties:")
-            print(TAB,"ieff = ",S.ieff*RAD)
-            print(TAB,"teff = ",S.teff*RAD)
-            print(TAB,"Borb = ",S.Borb)
+            print "Derived Properties:"
+            print TAB,"ieff = ",S.ieff*RAD
+            print TAB,"teff = ",S.teff*RAD
+            print TAB,"Borb = ",S.Borb
             
         #STORING
         cirs+=[cir]

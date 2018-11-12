@@ -196,7 +196,7 @@ def transitPosition(Rp,fe,i,t,B,direction=+1,sign=+1,qcorrected=False):
     return xp
 
 def testTransitDepth():
-    print(BARL,"Test Transit Depth",RBAR)
+    print BARL,"Test Transit Depth",RBAR
 
     #========================================
     #FIX RINGED PROPERTIES BY HAND
@@ -218,22 +218,22 @@ def testTransitDepth():
     #NOT RINGED TRANSIT DEPTH
     #========================================
     Anr=pi*NotRinged.Rp**2
-    print(TAB,"Transit area (not ringed): %.17e"%Anr)
+    print TAB,"Transit area (not ringed): %.17e"%Anr
 
     #========================================
     #ANALYTICAL TRANSIT DEPTH
     #========================================
     Aarg=analyticalTransitArea(Ringed.Rp,Ringed.block,Ringed.fi,Ringed.fe,Ringed.ieff)
-    print(TAB,"Analytical Transit area (ringed): %.17e"%Aarg)
+    print TAB,"Analytical Transit area (ringed): %.17e"%Aarg
     
     #========================================
     #RINGED TRANSIT DEPTH
     #========================================
     Arg=ringedPlanetArea(Ringed)
-    print(TAB,"Transit area (ringed): %.17e"%Arg)
+    print TAB,"Transit area (ringed): %.17e"%Arg
     r=sqrt(Arg/Anr)
-    print(TAB,"Ratio of depths: %.17e"%(Arg/Anr))
-    print(TAB,"Ratio of radii: %.17e"%(r))
+    print TAB,"Ratio of depths: %.17e"%(Arg/Anr)
+    print TAB,"Ratio of radii: %.17e"%(r)
 
     #========================================
     #MONTECARLO AREA
@@ -244,7 +244,7 @@ def testTransitDepth():
                                       Ringed.Ringext,
                                       Ringed.Ringint,
                                       NP=NP)
-    print(TAB,"Montecarlo area: %.17e +/- %.1e"%(Am,dA))
+    print TAB,"Montecarlo area: %.17e +/- %.1e"%(Am,dA)
     #"""
 
     #========================================
@@ -292,11 +292,11 @@ def testTransitDuration():
 
     Ringed.block=blockFactor(Ringed.tau,i)
 
-    print(BARL,"Test Transit Duration",RBAR)
+    print BARL,"Test Transit Duration",RBAR
 
-    print("Orientation parameters:")
-    print(TAB,"i = %.2f deg"%(i*RAD))
-    print(TAB,"t = %.2f deg"%(t*RAD))
+    print "Orientation parameters:"
+    print TAB,"i = %.2f deg"%(i*RAD)
+    print TAB,"t = %.2f deg"%(t*RAD)
 
     #========================================
     #PROPERTIES
@@ -322,14 +322,14 @@ def testTransitDuration():
                 linestyle='-',linewidth=1)
     #"""
 
-    print(TAB,"Transit duration numerical (not ringed):")
-    print(2*TAB,"Full: %.17e"%tT)
-    print(2*TAB,"Total: %.17e"%tF)
+    print TAB,"Transit duration numerical (not ringed):"
+    print 2*TAB,"Full: %.17e"%tT
+    print 2*TAB,"Total: %.17e"%tF
 
     #========================================
     #NOT RINGED TRANSIT DURATION (ANALYTICAL)
     #========================================
-    print(TAB,"Transit duration analytical (not ringed):")
+    print TAB,"Transit duration analytical (not ringed):"
 
     xp=sqrt((1+NotRinged.Rp)**2-NotRinged.Borb**2)
     xm=sqrt((1-NotRinged.Rp)**2-NotRinged.Borb**2)
@@ -346,24 +346,24 @@ def testTransitDuration():
     tT=P*arcsin(2*xp/(ap*sin(ip)))/(2*pi)
     tF=P*arcsin(2*xm/(ap*sin(ip)))/(2*pi)
 
-    print(2*TAB,"Full: %.17e"%tT)
-    print(2*TAB,"Total: %.17e"%tF)
+    print 2*TAB,"Full: %.17e"%tT
+    print 2*TAB,"Total: %.17e"%tF
 
     xp1=-xp
     xp2=-xm
     xp3=xm
     xp4=xp
-    print(2*TAB,"Contact point:")
-    print(3*TAB,"xp1 = %.17e"%xp1)
-    print(3*TAB,"xp2 = %.17e"%xp2)
-    print(3*TAB,"xp3 = %.17e"%xp3)
-    print(3*TAB,"xp4 = %.17e"%xp4)
+    print 2*TAB,"Contact point:"
+    print 3*TAB,"xp1 = %.17e"%xp1
+    print 3*TAB,"xp2 = %.17e"%xp2
+    print 3*TAB,"xp3 = %.17e"%xp3
+    print 3*TAB,"xp4 = %.17e"%xp4
     
     #========================================
     #RINGED TRANSIT DURATION (NUMERICAL)
     #========================================
     lw=1
-    print(TAB,"Transit duration numerical (ringed):")
+    print TAB,"Transit duration numerical (ringed):"
 
     tcsp=contactTimes(RingedC)
     tT=(tcsp[-1]-tcsp[1])/HOUR
@@ -397,20 +397,20 @@ def testTransitDuration():
     plotEllipse(ax,RingedC.Planet,color='r',
                 linestyle='-',linewidth=lw)
 
-    print(2*TAB,"Full: %.17e"%tT)
-    print(2*TAB,"Total: %.17e"%tF)
+    print 2*TAB,"Full: %.17e"%tT
+    print 2*TAB,"Total: %.17e"%tF
 
-    print(2*TAB,"Contact point:")
-    print(3*TAB,"xp1 = %.17e"%xp1)
-    print(3*TAB,"xp2 = %.17e"%xp2)
-    print(3*TAB,"xp3 = %.17e"%xp3)
-    print(3*TAB,"xp4 = %.17e"%xp4)
+    print 2*TAB,"Contact point:"
+    print 3*TAB,"xp1 = %.17e"%xp1
+    print 3*TAB,"xp2 = %.17e"%xp2
+    print 3*TAB,"xp3 = %.17e"%xp3
+    print 3*TAB,"xp4 = %.17e"%xp4
 
     #========================================
     #RINGED TRANSIT ANALYTICAL 
     #========================================
     lw=2
-    print(TAB,"Transit duration analytical (ringed):")
+    print TAB,"Transit duration analytical (ringed):"
 
     a=RingedC.Ringext.a
     b=RingedC.Ringext.b
@@ -432,14 +432,14 @@ def testTransitDuration():
     taT=P*arcsin((xpa4-xpa1)/(ap*sin(ip)))/(2*pi)
     taF=P*arcsin((xpa3-xpa2)/(ap*sin(ip)))/(2*pi)
 
-    print(2*TAB,"Full: %.17e"%taT)
-    print(2*TAB,"Total: %.17e"%taF)
+    print 2*TAB,"Full: %.17e"%taT
+    print 2*TAB,"Total: %.17e"%taF
 
-    print(2*TAB,"Contact points:")
-    print(3*TAB,"xpa1 = %.17e"%xpa1)
-    print(3*TAB,"xpa2 = %.17e"%xpa2)
-    print(3*TAB,"xpa3 = %.17e"%xpa3)
-    print(3*TAB,"xpa4 = %.17e"%xpa4)
+    print 2*TAB,"Contact points:"
+    print 3*TAB,"xpa1 = %.17e"%xpa1
+    print 3*TAB,"xpa2 = %.17e"%xpa2
+    print 3*TAB,"xpa3 = %.17e"%xpa3
+    print 3*TAB,"xpa4 = %.17e"%xpa4
 
     RingedC.Ringext.C[0]=xpa1
     RingedC.Planet.C[0]=xpa1
@@ -476,17 +476,17 @@ def testTransitDuration():
     dxp2=abs(xp2-xpa2)/abs(xpa2)*100
     dxp3=abs(xp3-xpa3)/abs(xpa3)*100
     dxp4=abs(xp4-xpa4)/abs(xpa4)*100
-    print(1*TAB,"Error in Contact points:")
-    print(2*TAB,"dxp1 = %.4f %%"%dxp1)
-    print(2*TAB,"dxp2 = %.4f %%"%dxp2)
-    print(2*TAB,"dxp3 = %.4f %%"%dxp3)
-    print(2*TAB,"dxp4 = %.4f %%"%dxp4)
+    print 1*TAB,"Error in Contact points:"
+    print 2*TAB,"dxp1 = %.4f %%"%dxp1
+    print 2*TAB,"dxp2 = %.4f %%"%dxp2
+    print 2*TAB,"dxp3 = %.4f %%"%dxp3
+    print 2*TAB,"dxp4 = %.4f %%"%dxp4
 
     dtT=abs(tT-taT)*60
     dtF=abs(tF-taF)*60
-    print(1*TAB,"Error in Contact points:")
-    print(2*TAB,"dtT = %.2f min"%dtT)
-    print(2*TAB,"dtF = %.2f min"%dtF)
+    print 1*TAB,"Error in Contact points:"
+    print 2*TAB,"dtT = %.2f min"%dtT
+    print 2*TAB,"dtF = %.2f min"%dtF
     
     #========================================
     #PLOT
@@ -510,7 +510,7 @@ def testTransitDuration():
 
 def errorTransitPositions():
 
-    print(BARL,"Testing Extremes",RBAR)
+    print BARL,"Testing Extremes",RBAR
 
     #////////////////////////////////////////
     #DATA
@@ -546,7 +546,7 @@ def errorTransitPositions():
     B=0.4
     i=0
     for ieff in ieffs:
-        print("Testing ieff = ",ieff*RAD)
+        print "Testing ieff = ",ieff*RAD
         SmallEllipse.b=Re*cos(ieff)
         j=0
         for teff in teffs:
@@ -593,7 +593,7 @@ def errorTransitTimes():
     #qload=True
     #qcorrected=True
     qcorrected=False
-    print(BARL,"Testing Analytical Times",RBAR)
+    print BARL,"Testing Analytical Times",RBAR
 
     #////////////////////////////////////////
     #SYSTEM
@@ -633,7 +633,7 @@ def errorTransitTimes():
         ii=0
         for ci in cieffs:
             i=arccos(ci)
-            print("Testing ieff = ",i*RAD)
+            print "Testing ieff = ",i*RAD
             jj=0
             for t in teffs:
                 RingedC.Ringext.b=RingedC.Ringext.a*cos(i)
@@ -841,7 +841,7 @@ def contourTransitDepths():
 
     qload=False
     #qload=True
-    print(BARL,"Testing Analytical Times",RBAR)
+    print BARL,"Testing Analytical Times",RBAR
 
     #////////////////////////////////////////
     #SYSTEM
@@ -877,7 +877,7 @@ def contourTransitDepths():
         ii=0
         for ci in cieffs:
             i=arccos(ci)
-            print("Testing ieff = ",i*RAD)
+            print "Testing ieff = ",i*RAD
             jj=0
             for t in teffs:
                 RingedC.ieff=i
@@ -958,7 +958,7 @@ def contourTransitDepths():
 
 def curveTransitDepths():
 
-    print(BARL,"Curve Transit Depth",RBAR)
+    print BARL,"Curve Transit Depth",RBAR
 
     #////////////////////////////////////////
     #SYSTEM
@@ -1147,9 +1147,9 @@ def transitDepthPosterior():
         npar=i-1
 
         line=[]
-        for i in range(Nplanets*Nsamples):
+        for i in xrange(Nplanets*Nsamples):
             if (i%Nplanets)==0:
-                print("Sample %d: %d planets generated..."%(i/Nplanets,i))
+                print "Sample %d: %d planets generated..."%(i/Nplanets,i)
             data=[i]
 
             #========================================
@@ -1168,12 +1168,12 @@ def transitDepthPosterior():
                 #PREPARE SYSTEM
                 exec("S.%s=val"%parkey)
                 if verbose and 0:
-                    print("Parameter %s:"%parkey)
-                    print(TAB,"Default value = %e"%(func(parameter[DEF])))
-                    print(TAB,"Range = %e-%e"%(func(parameter[MIN]),
-                                               func(parameter[MAX])))
-                    print(TAB,"Variable? = %d"%(parameter[STAT]))
-                    print(TAB,"Adopted value = %e"%(val))
+                    print "Parameter %s:"%parkey
+                    print TAB,"Default value = %e"%(func(parameter[DEF]))
+                    print TAB,"Range = %e-%e"%(func(parameter[MIN]),
+                                               func(parameter[MAX]))
+                    print TAB,"Variable? = %d"%(parameter[STAT])
+                    print TAB,"Adopted value = %e"%(val)
                     
             #========================================
             #TWEAK PARAMETERS
@@ -1328,7 +1328,7 @@ def contourPhotoRing():
     except:
         qcalc=1
 
-    print(BARL,"Calculating Photo-ring effect contours",RBAR)
+    print BARL,"Calculating Photo-ring effect contours",RBAR
 
     #////////////////////////////////////////
     #SYSTEM
@@ -1364,10 +1364,10 @@ def contourPhotoRing():
         ii=0
         for ci in cieffs:
             i=arccos(ci)
-            print("Testing ieff (cos ieff) = ",i*RAD,ci)
+            print "Testing ieff (cos ieff) = ",i*RAD,ci
             jj=0
             for t in teffs:
-                print(TAB,"Testing teff = ",t*RAD)
+                print TAB,"Testing teff = ",t*RAD
                 RingedC.ieff=i
 
                 RingedC.block=blockFactor(RingedC.tau,i)
@@ -1417,7 +1417,7 @@ def contourPhotoRing():
                                       tT,tF,
                                       P)/rho_true
 
-                print(2*TAB,"PR (Numerical) = %.6e, PR (Analytical) = %.6e"%(log10(pRn),log10(pR)))
+                print 2*TAB,"PR (Numerical) = %.6e, PR (Analytical) = %.6e"%(log10(pRn),log10(pR))
 
                 PR[ii,jj]=log10(pR)
                 PRN[ii,jj]=log10(pRn)
@@ -1605,9 +1605,9 @@ def photoRingPosterior():
         npar=i-1
 
         line=[]
-        for i in range(NplanetsPR*NsamplesPR):
+        for i in xrange(NplanetsPR*NsamplesPR):
             if (i%NplanetsPR)==0:
-                print("Sample %d: %d planets generated..."%(i/NplanetsPR,i))
+                print "Sample %d: %d planets generated..."%(i/NplanetsPR,i)
             data=[i]
 
             #========================================
@@ -1626,12 +1626,12 @@ def photoRingPosterior():
                 #PREPARE SYSTEM
                 exec("S.%s=val"%parkey)
                 if verbose and 0:
-                    print("Parameter %s:"%parkey)
-                    print(TAB,"Default value = %e"%(func(parameter[DEF])))
-                    print(TAB,"Range = %e-%e"%(func(parameter[MIN]),
-                                               func(parameter[MAX])))
-                    print(TAB,"Variable? = %d"%(parameter[STAT]))
-                    print(TAB,"Adopted value = %e"%(val))
+                    print "Parameter %s:"%parkey
+                    print TAB,"Default value = %e"%(func(parameter[DEF]))
+                    print TAB,"Range = %e-%e"%(func(parameter[MIN]),
+                                               func(parameter[MAX]))
+                    print TAB,"Variable? = %d"%(parameter[STAT])
+                    print TAB,"Adopted value = %e"%(val)
                     
             #========================================
             #TWEAK PARAMETERS
@@ -1908,9 +1908,9 @@ def photoRingPosteriorTiming():
         npar=i-1
 
         line=[]
-        for i in range(NplanetsPR*NsamplesPR):
+        for i in xrange(NplanetsPR*NsamplesPR):
             if (i%NplanetsPR)==0:
-                print("Sample %d: %d planets generated..."%(i/NplanetsPR,i))
+                print "Sample %d: %d planets generated..."%(i/NplanetsPR,i)
             data=[i]
 
             #========================================
@@ -1929,12 +1929,12 @@ def photoRingPosteriorTiming():
                 #PREPARE SYSTEM
                 exec("S.%s=val"%parkey)
                 if verbose and 0:
-                    print("Parameter %s:"%parkey)
-                    print(TAB,"Default value = %e"%(func(parameter[DEF])))
-                    print(TAB,"Range = %e-%e"%(func(parameter[MIN]),
-                                               func(parameter[MAX])))
-                    print(TAB,"Variable? = %d"%(parameter[STAT]))
-                    print(TAB,"Adopted value = %e"%(val))
+                    print "Parameter %s:"%parkey
+                    print TAB,"Default value = %e"%(func(parameter[DEF]))
+                    print TAB,"Range = %e-%e"%(func(parameter[MIN]),
+                                               func(parameter[MAX]))
+                    print TAB,"Variable? = %d"%(parameter[STAT])
+                    print TAB,"Adopted value = %e"%(val)
                     
             #========================================
             #TWEAK PARAMETERS
@@ -2149,7 +2149,7 @@ def testPhotoRing():
     t=Ringed.teff
     i=Ringed.ieff
 
-    print(BARL,"Test Transit Duration",RBAR)
+    print BARL,"Test Transit Duration",RBAR
 
 
     #========================================
@@ -2168,9 +2168,9 @@ def testPhotoRing():
 
     Ringed.block=blockFactor(Ringed.tau,i)
 
-    print("Orientation parameters:")
-    print(TAB,"i = %.2f deg"%(i*RAD))
-    print(TAB,"t = %.2f deg"%(t*RAD))
+    print "Orientation parameters:"
+    print TAB,"i = %.2f deg"%(i*RAD)
+    print TAB,"t = %.2f deg"%(t*RAD)
 
     #========================================
     #PROPERTIES
@@ -2181,7 +2181,7 @@ def testPhotoRing():
     ip=Ringed.iorb
     rho_true=S.Mstar/(4*pi/3*S.Rstar**3)
 
-    print("True density = ",rho_true)
+    print "True density = ",rho_true
     
     #========================================
     #NOT RINGED DENSITY
@@ -2192,14 +2192,14 @@ def testPhotoRing():
     tF=P*arcsin(2*xm/(ap*sin(ip)))/(2*pi)
     p=S.Rp**2
 
-    print("t_T, t_F = ",tT,tF)
+    print "t_T, t_F = ",tT,tF
     rho_obs=rhoObserved_Seager(p,S.Rstar,
                                tT,tF,S.Porb/HOUR)
 
-    print("Observed density (not ringed, Seager) = ",rho_obs)
+    print "Observed density (not ringed, Seager) = ",rho_obs
     rho_obs=rhoObserved_Kipping(p,S.Rstar,
                                tT,tF,S.Porb/HOUR)
-    print("Observed density (not ringed, Kipping) = ",rho_obs)
+    print "Observed density (not ringed, Kipping) = ",rho_obs
 
     #========================================
     #FIX RINGEDC PROPERTIES BY HAND
@@ -2209,10 +2209,10 @@ def testPhotoRing():
     #GOOD SPOT
     i=89.43*DEG;t=0.0*DEG
 
-    print("Orientation parameters (MANUAL):")
-    print(TAB,"b = %.2f"%(RingedC.Borb))
-    print(TAB,"i = %.2f deg"%(i*RAD))
-    print(TAB,"t = %.2f deg"%(t*RAD))
+    print "Orientation parameters (MANUAL):"
+    print TAB,"b = %.2f"%(RingedC.Borb)
+    print TAB,"i = %.2f deg"%(i*RAD)
+    print TAB,"t = %.2f deg"%(t*RAD)
     
     RingedC.Ringext.b=RingedC.Ringext.a*cos(i)
     RingedC.Ringint.b=RingedC.Ringint.a*cos(i)
@@ -2223,7 +2223,7 @@ def testPhotoRing():
     #========================================
     #RINGED TRANSIT DURATION (NUMERICAL)
     #========================================
-    print(BARL,"NUMERICAL",RBAR)
+    print BARL,"NUMERICAL",RBAR
 
     p=ringedPlanetArea(RingedC)/pi
 
@@ -2235,15 +2235,15 @@ def testPhotoRing():
                                tT,tF,S.Porb/HOUR)
     pR=log10(rho_obs/rho_true)
 
-    print("p = ",p)
-    print("t_T, t_F = ",tT,tF)
-    print("Observed density (ringed, numerical, Seager) = ",rho_obs)
-    print("Photo-ring effect (numerical) = ",pR)
+    print "p = ",p
+    print "t_T, t_F = ",tT,tF
+    print "Observed density (ringed, numerical, Seager) = ",rho_obs
+    print "Photo-ring effect (numerical) = ",pR
 
     #========================================
     #RINGED TRANSIT ANALYTICAL 
     #========================================
-    print(BARL,"ANALYTICAL",RBAR)
+    print BARL,"ANALYTICAL",RBAR
 
     p=analyticalTransitArea(RingedC.Rp,RingedC.block,
                             RingedC.fi,RingedC.fe,
@@ -2269,20 +2269,20 @@ def testPhotoRing():
                                 taT,taF,S.Porb/HOUR)
     pRa=log10(rho_obsa/rho_true)
 
-    print("p = ",p)
-    print("t_T, t_F = ",taT,taF)
-    print("Observed density (ringed, analytical, Seager) = ",rho_obsa)
-    print("Photo-ring effect (analytical) = ",pRa)
+    print "p = ",p
+    print "t_T, t_F = ",taT,taF
+    print "Observed density (ringed, analytical, Seager) = ",rho_obsa
+    print "Photo-ring effect (analytical) = ",pRa
 
     #========================================
     #ERRORS
     #========================================
     drho=abs(rho_obs-rho_obsa)/rho_true*100
-    print("Error in observed density = %.2f%%"%(drho))
+    print "Error in observed density = %.2f%%"%(drho)
     dT=abs(tT-taT)/tT*100
-    print("Error in total transit time = %.2f%%"%(dT))
+    print "Error in total transit time = %.2f%%"%(dT)
     dF=abs(tF-taF)/tF*100
-    print("Error in full transit = %.2f%%"%(dF))
+    print "Error in full transit = %.2f%%"%(dF)
     
     #========================================
     #PLOT
@@ -2341,7 +2341,7 @@ def contourPhotoRing2():
     except:
         qcalc=1
 
-    print(BARL,"Calculating Photo-ring effect contours",RBAR)
+    print BARL,"Calculating Photo-ring effect contours",RBAR
 
     #////////////////////////////////////////
     #SYSTEM
@@ -2351,10 +2351,10 @@ def contourPhotoRing2():
     P=Ringed.Porb/HOUR
     ip=Ringed.iorb
     B=RingedC.Borb
-    print("Impact parameter:",B)
-    print("Correction:",log10((1-B**2)**-0.75))
-    print("Maximum:",log10(Ringed.fe**-1.5*(1-B**2)**-0.75))
-    input()
+    print "Impact parameter:",B
+    print "Correction:",log10((1-B**2)**-0.75)
+    print "Maximum:",log10(Ringed.fe**-1.5*(1-B**2)**-0.75)
+    raw_input()
     Rp=RingedC.Rp
     rho_true=S.Mstar/(4*pi/3*S.Rstar**3)
 
@@ -2381,10 +2381,10 @@ def contourPhotoRing2():
         ii=0
         for ci in cieffs:
             i=arccos(ci)
-            print("Testing ieff (cos ieff) = ",i*RAD,ci)
+            print "Testing ieff (cos ieff) = ",i*RAD,ci
             jj=0
             for t in teffs:
-                print(TAB,"Testing teff = ",t*RAD)
+                print TAB,"Testing teff = ",t*RAD
                 RingedC.ieff=i
 
                 RingedC.block=blockFactor(RingedC.tau,i)
@@ -2434,7 +2434,7 @@ def contourPhotoRing2():
                                       tT,tF,
                                       P)/rho_true
 
-                print(2*TAB,"PR (Numerical) = %.6e, PR (Analytical) = %.6e"%(log10(pRn),log10(pR)))
+                print 2*TAB,"PR (Numerical) = %.6e, PR (Analytical) = %.6e"%(log10(pRn),log10(pR))
 
                 PR[ii,jj]=log10(pR)
                 PRN[ii,jj]=log10(pRn)
@@ -2463,7 +2463,7 @@ def contourPhotoRing2():
 
     dmin=PRN.min()
     dmax=PRN.max()
-    print("Minimum = ",dmin)
+    print "Minimum = ",dmin
 
     levels=linspace(dmin,dmax,100)
     c=ax.contourf(IS,TS*RAD,transpose(PRN),

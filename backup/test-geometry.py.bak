@@ -55,7 +55,7 @@ Ringint=Figure(C,
 #TEST ROUTINES
 ###################################################
 def test_area_striping(Planet,Ringext,Ringint):
-    print(BARL,"Testing Area Striping",RBAR)
+    print BARL,"Testing Area Striping",RBAR
 
     #////////////////////////////////////////
     #SYSTEM
@@ -71,19 +71,19 @@ def test_area_striping(Planet,Ringext,Ringint):
     dc,df=extremePointsMultiple((Planet,Ringext))
     Sc=Figure(AR(0,0),dc,dc,1.0,0.0,'Strip low')
     Sf=Figure(AR(0,0),df,df,1.0,0.0,'Strip low')
-    print("Extremes: ",dc,df)
+    print "Extremes: ",dc,df
 
     #////////////////////////////////////////
     #STRIPING AREA
     #////////////////////////////////////////
     deltad=(df-dc)/5.0
     ds=secureArange(dc,df,deltad)
-    print("Sampling points: ",ds)
+    print "Sampling points: ",ds
     Ats=areaStriping(S,ds)
-    print("Areas = ",Ats)
-    print("Total Area via striping = ",Ats.sum())
+    print "Areas = ",Ats
+    print "Total Area via striping = ",Ats.sum()
     At=transitArea(S)[0]
-    print("Total Area analytic = ",At)
+    print "Total Area analytic = ",At
 
     #////////////////////////////////////////
     #STRIPING VIA LIMB DARKENING
@@ -91,17 +91,17 @@ def test_area_striping(Planet,Ringext,Ringint):
     deltad=(df-dc)/10.0
     ds=secureArange(dc,min(1,df),deltad)
     ds=limbStriping(ds,c1,c2)
-    print("Limiting radii = ",ds)
+    print "Limiting radii = ",ds
     dss=0.5*(ds[:-1]+ds[1:])
-    print("Sampling = ",dss)
+    print "Sampling = ",dss
     iss=limbDarkeningNormalized(dss,c1,c2)
-    print("Limb darkening = ",iss)
+    print "Limb darkening = ",iss
     Ats=areaStriping(S,ds)
-    print("Areas = ",Ats)
+    print "Areas = ",Ats
     its=Ats*iss
     fts=its.sum()
-    print("Total Area via ld. striping = ",Ats.sum())
-    print("Total flux via ld. striping = ",its.sum())
+    print "Total Area via ld. striping = ",Ats.sum()
+    print "Total flux via ld. striping = ",its.sum()
 
     #////////////////////////////////////////
     #PRECISE STRIPING AND LIMB DARKENING
@@ -157,7 +157,7 @@ def test_area_striping(Planet,Ringext,Ringint):
     return fts,ftsf
 
 def test_area_strip():
-    print(BARL,"Testing Strip Area",RBAR)
+    print BARL,"Testing Strip Area",RBAR
 
     #////////////////////////////////////////
     #SYSTEM
@@ -172,19 +172,19 @@ def test_area_strip():
     dc,df=extremePointsMultiple((Planet,Ringext))
     Sc=Figure(AR(0,0),dc,dc,1.0,0.0,'Strip low')
     Sf=Figure(AR(0,0),df,df,1.0,0.0,'Strip low')
-    print("Extremes: ",dc,df)
+    print "Extremes: ",dc,df
 
     Rlow=0.7
     Rup=0.8
     Slow=Figure(AR(0,0),Rlow,Rlow,1.0,0.0,'Strip low')
     Sup=Figure(AR(0,0),Rup,Rup,1.0,0.0,'Strip low')
-    print("Strip limits: ",Rlow,Rup)
+    print "Strip limits: ",Rlow,Rup
 
     #////////////////////////////////////////
     #STRIP AREA
     #////////////////////////////////////////
     At=stripArea(S,Rlow,Rup)
-    print("Analytic Area = %e"%At)
+    print "Analytic Area = %e"%At
 
     #////////////////////////////////////////
     #MONTECARLO AREA
@@ -199,10 +199,10 @@ def test_area_strip():
     mA=mA1+mA2
     dA=sqrt(dA1**2+dA2**2)
     xs,ys=concatenate((xs1,xs2)),concatenate((ys1,ys2))
-    print("Montecarlo Area = %e +/- %e"%(mA,dA))
+    print "Montecarlo Area = %e +/- %e"%(mA,dA)
     if dA>0:ns=abs(At-mA)/dA
     else:ns=0
-    print("Discrepance = %f sigmas"%(ns))
+    print "Discrepance = %f sigmas"%(ns)
     #"""
     #xs,ys=[],[]
 
@@ -240,7 +240,7 @@ def test_area_strip():
     fig.savefig("plots/test_area_strip.png")
 
 def test_area_oblate():
-    print(BARL,"Testing Area Oblate Planet",RBAR)
+    print BARL,"Testing Area Oblate Planet",RBAR
     #////////////////////////////////////////
     #FIND EXTREMES
     #////////////////////////////////////////
@@ -257,16 +257,16 @@ def test_area_oblate():
     At=Es[0]
     Fs=Es[-1]
     Ps=Es[-2]
-    print("Transit Area: ",At)
+    print "Transit Area: ",At
 
     #////////////////////////////////////////
     #MONTECARLO AREAS
     #////////////////////////////////////////
     Am,dA,xs,ys=transitAreaOblateMontecarlo(Planet,NP=NP)
-    print("Montecarlo Area = %f +/- %f"%(Am,dA))
+    print "Montecarlo Area = %f +/- %f"%(Am,dA)
     if dA>0:ns=abs(At-Am)/dA
     else:ns=0
-    print("Discrepance = %f sigmas"%(ns))
+    print "Discrepance = %f sigmas"%(ns)
 
     #////////////////////////////////////////
     #PLOT
@@ -325,7 +325,7 @@ def test_area_oblate():
     fig.savefig("plots/test_area_oblate_eqs.png")
 
 def test_areas():
-    print(BARL,"Testing Areas",RBAR)
+    print BARL,"Testing Areas",RBAR
     #////////////////////////////////////////
     #FIND EXTREMES
     #////////////////////////////////////////
@@ -348,7 +348,7 @@ def test_areas():
     Atae=pi*ae*be-4*ae*be/(ae**2-be**2)*sqrt((r**2-be**2)*(ae**2-r**2))-2*(r-ae*sqrt((r**2-be**2)/(ae**2-be**2)))*be*sqrt((ae**2-r**2)/(ae**2-be**2))-f*(be-be*sqrt((ae**2-r**2)/(ae**2-be**2)))*ae*sqrt((r**2-be**2)/(ae**2-be**2))
     Atai=pi*ai*bi-4*ai*bi/(ai**2-bi**2)*sqrt((r**2-bi**2)*(ai**2-r**2))-2*(r-ai*sqrt((r**2-bi**2)/(ai**2-bi**2)))*bi*sqrt((ai**2-r**2)/(ai**2-bi**2))-f*(bi-bi*sqrt((ai**2-r**2)/(ai**2-bi**2)))*ai*sqrt((r**2-bi**2)/(ai**2-bi**2))
     Ata=Atap+Atae-Atai
-    print("Analytic area: ",Ata)
+    print "Analytic area: ",Ata
 
 
     Es=transitArea(S)
@@ -356,36 +356,36 @@ def test_areas():
     At=Es[0]
     Fs=Es[-1]
     Ps=Es[-2]
-    print("Transit Area: ",At)
-    print("Discrepance with analytic (%): ",abs(At-Ata)/At*100)
-    print(TAB,"Planet Area: ",Es[1])
-    print(TAB,"External Ring Area: ",Es[2])
-    print(TAB,"Internal Ring Area: ",Es[3])
-    print(TAB,"Common External Ring Area: ",Es[4])
-    print(TAB,"Common Internal Ring Area: ",Es[5])
+    print "Transit Area: ",At
+    print "Discrepance with analytic (%): ",abs(At-Ata)/At*100
+    print TAB,"Planet Area: ",Es[1]
+    print TAB,"External Ring Area: ",Es[2]
+    print TAB,"Internal Ring Area: ",Es[3]
+    print TAB,"Common External Ring Area: ",Es[4]
+    print TAB,"Common Internal Ring Area: ",Es[5]
 
     #////////////////////////////////////////
     #MONTECARLO AREAS
     #////////////////////////////////////////
     Am,dA,xs,ys=transitAreaMontecarlo(Planet,Ringext,Ringint,NP=NP)
-    print("Montecarlo Area = %f +/- %f"%(Am,dA))
+    print "Montecarlo Area = %f +/- %f"%(Am,dA)
     #PARTIAL
     A,x,x,x=montecarloArea([Star,Planet],
                            [+1,+1],Npoints=1E3)
-    print(TAB,"Montecarlo Planet = ",A)
+    print TAB,"Montecarlo Planet = ",A
     A,x,x,x=montecarloArea([Star,Ringext],
                            [+1,+1],Npoints=1E3)
-    print(TAB,"Montecarlo External Ring = ",A)
+    print TAB,"Montecarlo External Ring = ",A
     A,x,x,x=montecarloArea([Star,Planet,Ringext],
                            [+1,+1,+1],Npoints=1E3)
-    print(TAB,"Montecarlo External Ring Common = ",A)
+    print TAB,"Montecarlo External Ring Common = ",A
     A,x,x,x=montecarloArea([Star,Planet,Ringint],
                            [+1,+1,+1],Npoints=1E3)
-    print(TAB,"Montecarlo Internal Ring Common = ",A)
+    print TAB,"Montecarlo Internal Ring Common = ",A
 
     if dA>0:ns=abs(At-Am)/dA
     else:ns=0
-    print("Discrepance = %f sigmas"%(ns))
+    print "Discrepance = %f sigmas"%(ns)
 
     Am,dA,xsn,ysn=transitAreaMontecarlo(Fs[0],Fs[1],Fs[2],NP=NP)
 
@@ -451,12 +451,12 @@ def test_areas():
     fig.savefig("plots/test_areas_eqs.png")
 
 def test_analytic_area():
-    print(BARL,"Testing Approximate Formula for Area",RBAR)
+    print BARL,"Testing Approximate Formula for Area",RBAR
     #////////////////////////////////////////
     #ERROR
     #////////////////////////////////////////
     imin=arccos(1/fe)
-    print("Minimum inclination angle: ",imin*RAD)
+    print "Minimum inclination angle: ",imin*RAD
     S=dict2obj(dict(Planet=Planet,
                     Ringext=Ringext,
                     Ringint=Ringint))
@@ -522,19 +522,19 @@ def test_analytic_area():
         dA=abs(At-Aa)/At*100
         
         if Verbose:
-            print("Summary Exact:")
-            print(TAB,"Planet Area: ",Es[1])
-            print(TAB,"External Ring Area: ",Es[2]-Es[5])
-            print(TAB,"Internal Ring Area: ",Es[3]-Es[5])
-            print("Transit Area: ",At)
+            print "Summary Exact:"
+            print TAB,"Planet Area: ",Es[1]
+            print TAB,"External Ring Area: ",Es[2]-Es[5]
+            print TAB,"Internal Ring Area: ",Es[3]-Es[5]
+            print "Transit Area: ",At
 
-            print("Summary Approximate:")
-            print(TAB,"Planet Area: ",pi*Rp**2)
-            print(TAB,"External Ring Area: ",Ae)
-            print(TAB,"Internal Ring Area: ",Ai)
-            print("Transit Area: ",At)
+            print "Summary Approximate:"
+            print TAB,"Planet Area: ",pi*Rp**2
+            print TAB,"External Ring Area: ",Ae
+            print TAB,"Internal Ring Area: ",Ai
+            print "Transit Area: ",At
 
-            print("Error area (%): ",dA)
+            print "Error area (%): ",dA
         return At,Aa,dA
 
     #////////////////////////////////////////
@@ -555,7 +555,7 @@ def test_analytic_area():
     fig.savefig("plots/test_analytic_area_error.png")
 
 def test_points():
-    print(BARL,"Testing Intersection Points",RBAR)
+    print BARL,"Testing Intersection Points",RBAR
     #////////////////////////////////////////
     #FIND EXTREMES
     #////////////////////////////////////////
@@ -628,7 +628,7 @@ def test_points():
     fig.savefig("plots/test_points.png")
     
 def test_inclusion():
-    print(BARL,"Testing Extremes",RBAR)
+    print BARL,"Testing Extremes",RBAR
     #////////////////////////////////////////
     #FIGURE
     #////////////////////////////////////////
@@ -640,7 +640,7 @@ def test_inclusion():
     #////////////////////////////////////////
     dc,sE,cE=extremePoint2(SmallEllipse,sgn=CLOSEST)
 
-    print(sE,cE)
+    print sE,cE
 
     a=SmallEllipse.a
     b=SmallEllipse.b
@@ -650,7 +650,7 @@ def test_inclusion():
 
     #NO INCLINATION
     u=b*y/(c2-a*x)
-    print("Approximation no inclination: ",u)
+    print "Approximation no inclination: ",u
     x=sqrt(1-y**2*(1-b**2/(a)))
 
     #x=1-0.5*y**2*(1-b**2/a)
@@ -661,7 +661,7 @@ def test_inclusion():
     #x=sqrt(1-y**2*(1-b**2/(a*x)))
     #x=sqrt(1-y**2*(1-b**2/(a*x)))
     
-    print(dc,sE,cE,u,x)
+    print dc,sE,cE,u,x
 
     SmallEllipse.C[0]=x+a
 
@@ -678,8 +678,8 @@ def test_inclusion():
     #Approx 2: x=1
     sEt1=b*(y*cos(teff)-sin(teff))/\
         (c2-a*(cos(teff)+y*sin(teff)))
-    print("Approximation inclination 0: ",sEt0)
-    print("Approximation inclination 1: ",sEt1)
+    print "Approximation inclination 0: ",sEt0
+    print "Approximation inclination 1: ",sEt1
 
     x=sqrt(1-(y-a*sin(teff)-b**2*(y*cos(teff)+sin(teff)/a))**2)
     x=sqrt(1-a**2*(sin(teff)-y/a)**2*(1-b**2/a))
@@ -687,7 +687,7 @@ def test_inclusion():
     #"""
 
     dc,df=extremePoints(SmallEllipse)
-    print("Extremes: ",dc,df,abs(dc-1)*100,"%")
+    print "Extremes: ",dc,df,abs(dc-1)*100,"%"
 
     #////////////////////////////////////////
     #PLOT ELLIPSES
@@ -715,7 +715,7 @@ def test_inclusion():
     fig.savefig("plots/test_inclusion.png")
 
 def test_analytic_contact():
-    print(BARL,"Testing Extremes",RBAR)
+    print BARL,"Testing Extremes",RBAR
 
     #////////////////////////////////////////
     #MAKE A MAP
@@ -731,7 +731,7 @@ def test_analytic_contact():
     B=0.4
     i=0
     for ieff in ieffs:
-        print("Testing ieff = ",ieff*RAD)
+        print "Testing ieff = ",ieff*RAD
         SmallEllipse.b=Re*cos(ieff)
         j=0
         for teff in teffs:
@@ -743,7 +743,7 @@ def test_analytic_contact():
             SmallEllipse.C[0]=x
             SmallEllipse.C[1]=B
             dc,df=extremePoints(SmallEllipse)
-            print(dc,df)
+            print dc,df
             DIS[i,j]=abs(1-dc)*100
             #print abs(1-dc)*100;exit(0)
             j+=1
@@ -816,7 +816,7 @@ def test_analytic_contact():
     fig.savefig("plots/test_analytic_contact.png")
 
 def test_intersect():
-    print(BARL,"Testing Intersection",RBAR)
+    print BARL,"Testing Intersection",RBAR
     #////////////////////////////////////////
     #TEST INTERSECTION
     #////////////////////////////////////////
