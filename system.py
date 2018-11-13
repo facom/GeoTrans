@@ -9,12 +9,10 @@ System=dict2obj(dict(\
 #//////////////////////////////
 #DETECTOR
 #//////////////////////////////
-Ddet=0.5,#Aperture, m
-qeff=1.0,#Quantum efficiency
+Ddet=0.95,#Aperture, m
 
-#Pass band
-lambda1=400,lambda2=900, #Kepler
-#lambda1=600,lambda2=1100, #TESS
+#QuantumEfficiency
+QDetector=QKEPLER,
 
 #//////////////////////////////
 #STAR

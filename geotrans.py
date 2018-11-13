@@ -23,7 +23,10 @@ from astropy.constants import c
 import astropy.units as u
 from astropy.coordinates import SkyCoord
 from astropy.time import Time
-KERNEL = SPK.open('util/de430.bsp')
+import pandas as pd
+from scipy.integrate import quad
+from scipy.interpolate import interp1d
+import json
 
 ###################################################
 #REMOVE WARNINGS
@@ -151,6 +154,28 @@ GCONST=const.G
 HP=const.h
 KB=const.k
 CSPEED=const.c
+
+###################################################
+#LOAD EXTERNAL DATA
+###################################################
+PLANETARY_KERNEL = SPK.open('util/de430.bsp')
+
+#Sources:
+# https://heasarc.gsfc.nasa.gov/docs/tess/the-tess-space-telescope.html
+# https://keplerscience.arc.nasa.gov/the-kepler-space-telescope.html
+
+DATA_KEPLER=pd.read_csv("util/Kepler_Response.csv",names=["lambda","q"])
+DATA_TESS=pd.read_csv("util/TESS_Response.csv",names=["lambda","q"])
+QKEPLER=interp1d(DATA_KEPLER["lambda"]*NANO,DATA_KEPLER["q"],kind='linear')
+QTESS=interp1d(DATA_TESS["lambda"]*NANO,DATA_TESS["q"],kind='linear')
+
+#UTC=January 1, 2009 12:00:00, see http://archive.stsci.edu/kepler/manuals/archive_manual.htm
+BJD_KEPLER=2454833.0
+DATE_KEPLER="2009-01-01T12:00:00"
+
+#Global quantum efficiency
+QKEPLER_GLOBAL=1.00 
+QTESS_GLOBAL=0.50
 
 ###################################################
 #DATA TYPES
@@ -1950,12 +1975,11 @@ def derivedSystemProperties(S):
     if S.Rstar<0:
         S.Rstar=RSUN*(S.Mstar/MSUN)**0.8
     if S.Lstar<0:
-        S.Lstar=LSUN*(S.Mstar/MSUN)**3.5
+        S.Lstar=LSUN*(S.Tstar/TSUN)**4*(S.Rstar/RSUN)**2
 
     #STAR
     #For quantum efficiency of Kepler and TESS see: 
-    #https://heasarc.gsfc.nasa.gov/docs/tess/the-tess-space-telescope.html
-    S.Flux=S.qeff*planckPhotons(S.lambda1*NANO,S.lambda2*NANO,S.Tstar)*S.Rstar**2/S.Dstar**2*(pi*S.Ddet**2)
+    S.Flux=QKEPLER_GLOBAL*planckPhotonsDetected(S.QDetector,S.Tstar)*S.Rstar**2/(S.Dstar**2)*(pi*(S.Ddet/2)**2)
 
     #ORBIT
     S.Porb=2*pi*sqrt(S.ap**3/(GCONST*(S.Mstar+S.Mplanet)))
@@ -2149,9 +2173,18 @@ def planckPhotonDistrib(lamb,T):
     J=pi*B/(HP*CSPEED/lamb)
     return J
 
+def planckDetectedDistrib(lamb,T,Qfunc):
+    Jd=planckPhotonDistrib(lamb,T)*Qfunc(lamb)
+    return Jd
+
 def planckPhotons(lamb1,lamb2,T):
     N,dN=integrate(planckPhotonDistrib,
                    lamb1,lamb2,args=(T,))
+    return N
+
+def planckPhotonsDetected(Qfunc,T):
+    N,dN=integrate(planckDetectedDistrib,
+                   Qfunc.x.min(),Qfunc.x.max(),args=(T,Qfunc))
     return N
 
 def gaussianQuadrature(func,a,b,args=(0,)):
@@ -2731,6 +2764,7 @@ def offSet(dx,dy):
     return toff
 
 #Adapted from: https://gist.github.com/mwcraig/38469d291643d0ae04dc
+
 def jd2bkjd(jd_utc, sky_position):
     """
     Return BJD_TDB from JD_UTC at geocenter for object at desired RA/Dec.
@@ -2749,16 +2783,12 @@ def jd2bkjd(jd_utc, sky_position):
     bjd_tdb : `astropy.Quantity`
         BJD in the TDB time scale for each of the input JD_UTC.
     """
-    #Reference jd
-    #UTC=January 1, 2009 12:00:00, see http://archive.stsci.edu/kepler/manuals/archive_manual.htm
-    kjd=2454833.0
-    
     # Calculate jd_tdb from jd_utc for each of the input jd_utc
     jd_utc = Time(jd_utc, format='jd', scale='utc')
     jd_tdb = jd_utc.tdb
 
     # Calculate the position of the sun at each jd_tdb
-    sun_earth_displacement = KERNEL[0, 3].compute(jd_tdb.jd) * u.km
+    sun_earth_displacement = PLANETARY_KERNEL[0, 3].compute(jd_tdb.jd) * u.km
     sum_axis = sun_earth_displacement.ndim - 1
 
     # Calculate the time offset to the barycenter using the plane wave approximation
@@ -2769,9 +2799,20 @@ def jd2bkjd(jd_utc, sky_position):
     bjd_tdb = jd_tdb + delta_t_utc
 
     # Compute BKJD
-    bkjd=bjd_tdb.value-kjd
+    bkjd=bjd_tdb.value-BJD_KEPLER
 
     return bkjd
+    
+def bkjd2jd(bkjd,sky_position):
+    jd1=Time(DATE_KEPLER,format="isot",scale="utc").jd
+    jd2=Time.now().jd
+    target=lambda jd:jd2bkjd(jd,sky_position)-bkjd
+    jd=brentq(target,jd1,jd2)
+    return jd
+
+def niceDict(mydict):
+    import json
+    return json.dumps(mydict,indent=4,sort_keys=True)
 
 if __name__=="__main__":
 
@@ -2795,4 +2836,4 @@ if __name__=="__main__":
 
     #Import test star
     from kepler421 import *
-    print(System.Flux)
+    print(System.Flux,System.Lstar/LSUN)
