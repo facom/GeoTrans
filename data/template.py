@@ -9,7 +9,8 @@ System=dict2obj(dict(\
 #//////////////////////////////
 #DETECTOR
 #//////////////////////////////
-Ddet=0.95,#Aperture, m
+#Aperture, m
+Ddet=0.95,
 
 #QuantumEfficiency
 QDetector=QKEPLER,
@@ -17,6 +18,14 @@ QDetector=QKEPLER,
 #//////////////////////////////
 #STAR
 #//////////////////////////////
+
+#Name
+StarName="Sun",
+CatName="Sun",
+
+#Kepler data source
+#Search: https://archive.stsci.edu/kepler/data_search/search.php
+DataSource="https://archive.stsci.edu/kepler/data_search/search.php",
 
 #Physical properties
 Mstar=1.0*MSUN,
@@ -26,8 +35,8 @@ Tstar=1.0*TSUN,
 Dstar=1*KILO*PARSEC,
 
 #Position
-RA="23:23:08.55", #hours
-Dec="+18:24:59.3", #degrees
+RA="00:00:00.00", #hours
+Dec="+00:00:00.0", #degrees
 
 #Limb darkening parameters
 c1=0.70,#Limb Darkening

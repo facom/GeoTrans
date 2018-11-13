@@ -13,6 +13,7 @@ from scipy.integrate import quad as integrate
 from scipy.interpolate import interp1d as interpolant
 from sys import argv,exit
 from os import system
+from collections import Counter, OrderedDict
 from numpy import *
 from lmfit import minimize,Parameters,Parameter,report_fit
 import subprocess
@@ -26,6 +27,10 @@ from scipy.integrate import quad
 from scipy.interpolate import interp1d
 import json
 import os
+from tqdm import tqdm
+import threading
+import time
+from copy import deepcopy
 
 ###################################################
 #REMOVE WARNINGS
@@ -2123,7 +2128,7 @@ def updatePlanetRings(S,phir=123,ir=123):
     S.Ar=ringedPlanetArea(S)
     
     #PLANET AREA
-    S.Ap=ringedPlanetArea(S)
+    S.Ap=pi*S.Rp**2
 
     #CHECK IF GRAZING
     updatePosition(S,S.tcen)
@@ -2137,6 +2142,16 @@ def updatePlanetRings(S,phir=123,ir=123):
         S.grazing=1
     else:
         S.grazing=0
+
+    #CONTACT TIMES
+    tcen,t1,t2,t3,t4=contactTimes(S)
+    S.tmin=t1-2*S.dtplanet
+    S.tmax=t4+2*S.dtplanet
+
+    #PHASES
+    S.pcen=mod(S.tcen,S.Porb)/S.Porb
+    S.pmin=mod(S.tmin,S.Porb)/S.Porb
+    S.pmax=mod(S.tmax,S.Porb)/S.Porb
     
 def systemShow(S):
     pass
@@ -2179,6 +2194,10 @@ def systemShow(S):
     print(TAB,"Impact parameter = %e Rstar"%(S.Borb))
     print(TAB,"Central time = %e s = %e Porb"%(S.tcen,S.tcen/S.Porb))
     print(TAB,"Estimated transit duration = %e s = %e h"%(S.dtrans,S.dtrans/3600.0))
+
+    print("Contact times:")
+    print(TAB,f"First contact: {(S.tmin-S.tcen)/HOUR}")
+    print(TAB,f"Last contact: {(S.tmax-S.tcen)/HOUR}")
 
 def updatePosition(S,t):
     S.t=t
@@ -2512,6 +2531,13 @@ def fluxLimbTime(t,Ar,S,areas=areaStriping):
     #raw_input()
     return 1-iF
 
+def transitFlux(t,S):
+    p=mod(t,S.Porb)/S.Porb
+    if p>=S.pmin and p<=S.pmax:it=fluxLimbTime(t,S.Ar,S)
+    else:it=1.0
+    s=S.Flux*it
+    return s
+
 def histPosterior(xs,Nsamples,nbins=5,**args):
     Ntotal=len(xs)
     Npoints=Ntotal/Nsamples
@@ -2837,6 +2863,29 @@ def niceDict(mydict):
     import json
     return json.dumps(mydict,indent=4,sort_keys=True)
 
+ETIME=time.time()
+QTIME=0
+def elapsed(pref="\n"):
+    global ETIME,QTIME
+    t=time.time()
+    et=t-ETIME
+    ETIME=t
+    if QTIME:print(f"{pref}Elapsed time: %.3g ms, %.3g s, %.3g min, %.3g h"%(1000*et,et,et/60.,et/3600.)) 
+    else:QTIME=1
+    return et
+
+def runParallel(worker,objects,ts,s,ds,Np,test=False):
+    import numpy as np
+    wd=np.array_split(objects,Np)
+    print("Data segments assigned to workers:"+str([len(w) for w in wd]))
+    if test:return
+    threads=[]
+    for i,d in enumerate(wd):
+        threads.append(threading.Thread(target=worker,args=(i,d,ts,s,ds)))
+        threads[-1].start()
+    [t.join() for t in threads]
+    print("\n"*Np)
+
 ###################################################
 #LOAD CONFIGURATION
 ###################################################
@@ -2848,9 +2897,6 @@ CONF=loadArgv(CONF.__dict__)
 ###################################################
 if __name__=="__main__":
 
-    #Import System
-    from system import *
-    
     #UTC Date string
     date="2009-05-22T00:19:58"
     t=Time(date,format="isot",scale="utc")
@@ -2868,4 +2914,4 @@ if __name__=="__main__":
 
     #Import test star
     from data.kepler421 import *
-    print(System.Flux,System.Lstar/LSUN)
+    print(System.Flux,System.Lstar/LSUN,System.Ar,System.Ap)
