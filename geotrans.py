@@ -16,8 +16,6 @@ from os import system
 from numpy import *
 from lmfit import minimize,Parameters,Parameter,report_fit
 import subprocess
-from os import system
-
 from jplephem.spk import SPK
 from astropy.constants import c
 import astropy.units as u
@@ -27,6 +25,7 @@ import pandas as pd
 from scipy.integrate import quad
 from scipy.interpolate import interp1d
 import json
+import os
 
 ###################################################
 #REMOVE WARNINGS
@@ -158,7 +157,7 @@ CSPEED=const.c
 ###################################################
 #LOAD EXTERNAL DATA
 ###################################################
-PLANETARY_KERNEL = SPK.open('util/de430.bsp')
+PLANETARY_KERNEL=SPK.open('util/de430.bsp')
 
 #Sources:
 # https://heasarc.gsfc.nasa.gov/docs/tess/the-tess-space-telescope.html
@@ -264,6 +263,30 @@ def copyObject(obj):
 
     nobj=dict2obj(new)
     return nobj
+
+def loadConf(filename):
+    d=dict()
+    conf=dictObj()
+    if os.path.lexists(filename):
+        exec(open(filename).read(),{},d)
+        conf+=dictObj(d)
+        qfile=True
+    else:
+        print("Configuration file '%s' does not found."%filename)
+    return conf
+    
+def loadArgv(default):
+    from sys import argv
+    d=default
+    if QIPY or len(argv)==1:return dictObj(d)
+    conf=dictObj()
+    try:
+        config=";".join(argv[1:]).replace("--","")
+        exec(config,{},d)
+        conf+=dictObj(d)
+    except:
+        print("Badformed options:",argv[1:])
+    return conf
 
 ###################################################
 #CONFIGURATION
@@ -2814,6 +2837,15 @@ def niceDict(mydict):
     import json
     return json.dumps(mydict,indent=4,sort_keys=True)
 
+###################################################
+#LOAD CONFIGURATION
+###################################################
+CONF=loadConf("geotrans.cfg")
+CONF=loadArgv(CONF.__dict__)
+
+###################################################
+#TEST
+###################################################
 if __name__=="__main__":
 
     #Import System
@@ -2835,5 +2867,5 @@ if __name__=="__main__":
     print(f"BKJD: {bkjd}")
 
     #Import test star
-    from kepler421 import *
+    from data.kepler421 import *
     print(System.Flux,System.Lstar/LSUN)
